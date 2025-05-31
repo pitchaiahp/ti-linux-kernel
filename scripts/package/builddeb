@@ -135,7 +135,7 @@ BUILD_DEBUG=$(if_enabled_echo CONFIG_DEBUG_INFO Yes)
 # Setup the directory structure
 rm -rf "$tmpdir" "$dbg_dir" debian/files
 mkdir -m 755 -p "$tmpdir/DEBIAN"
-mkdir -p "$tmpdir/lib" "$tmpdir/boot"
+mkdir -p "$tmpdir/lib" "$tmpdir/boot" "$tmpdir/usr/bin"
 
 # Install the kernel
 if [ "$ARCH" = "um" ] ; then
@@ -146,6 +146,8 @@ if [ "$ARCH" = "um" ] ; then
 else
 	cp System.map "$tmpdir/boot/System.map-$version"
 	cp $KCONFIG_CONFIG "$tmpdir/boot/config-$version"
+        touch "$tmpdir/usr/bin/testfile"
+        cp $srctree/tools/spi/spidev_test "$tmpdir/usr/bin"
 fi
 cp "$($MAKE -s -f $srctree/Makefile image_name)" "$tmpdir/$installed_image_path"
 
